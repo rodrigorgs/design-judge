@@ -15,13 +15,6 @@ public class ClassElement extends Element {
 		klass = getReflectionElement();
 	}
 	
-	@Override
-	public void mustExist() {
-		if (getReflectionElement() == null) {
-			throw new RuntimeException("Element " + this + " does not exist");
-		}
-	}
-	
 	// TODO: should return ElementSet
 	@Override
 	public Element get(Element element) {

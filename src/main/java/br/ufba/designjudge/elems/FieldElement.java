@@ -3,6 +3,8 @@ package br.ufba.designjudge.elems;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
 
 public class FieldElement extends ClassMemberElement {
 	private int modifiers;
@@ -21,23 +23,21 @@ public class FieldElement extends ClassMemberElement {
 	}
 	
 	@Override
-	public Object[] getMatchingReflectionElements() {
+	public Field[] getMatchingReflectionElements() {
 		ArrayList<Constructor> result = new ArrayList<>();
 
 		Class c = getReflectionClass();
 		if (c == null) {
-			return new Object[0];
+			return new Field[0];
 		}
 
-		if (getName() == null) {
-			return c.getDeclaredFields();
-		} else {
-			try {
-				return new Object[] { c.getDeclaredField(getName()) };
-			} catch (NoSuchFieldException | SecurityException e) {
-				return new Object[0];
-			}
+		Stream<Field> stream = Arrays.stream(c.getDeclaredFields());
+		stream = stream.filter(f -> !f.getName().startsWith("$"));
+		if (getName() != null) {
+			stream = stream.filter(f -> f.getName().equals(getName()));
 		}
+
+		return stream.toArray(Field[]::new);
 	}
 	
 	@Override

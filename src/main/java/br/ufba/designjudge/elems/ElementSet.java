@@ -21,6 +21,10 @@ public class ElementSet extends Element {
 		return elements.stream();
 	}
 
+	public int size() {
+		return elements.size();
+	}
+
 	public boolean isEmpty() {
 		return elements.isEmpty();
 	}

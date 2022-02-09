@@ -40,6 +40,7 @@ public abstract class Element {
 	}
 	
 	// TODO: make it an element set
+	// TODO: remove this one
 	public Element get(Element e) {
 		return new NullElement();
 	}
