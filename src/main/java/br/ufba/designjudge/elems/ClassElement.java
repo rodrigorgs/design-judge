@@ -29,6 +29,10 @@ public class ClassElement extends Element {
 			ConstructorElement ctor = (ConstructorElement)element;
 			ctor.setKlass(this);
 			return ctor;
+		} else if (element instanceof MethodElement) {
+			MethodElement m = (MethodElement)element;
+			m.setKlass(this);
+			return m;
 		} else if (element instanceof ElementSet) {
 			return super.get(element);
 		} else {
