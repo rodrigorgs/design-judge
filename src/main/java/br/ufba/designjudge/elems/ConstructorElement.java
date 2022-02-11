@@ -54,7 +54,6 @@ public class ConstructorElement extends ClassMemberElement {
 	}
 	
 	// TODO: if there are multiple matches, use parameter list to choose correct one
-	// TODO: implement same on MethodElement
 	public Object call(Object ...args) {
 		Constructor[] constructors = getMatchingReflectionElements();
 		

@@ -1,6 +1,7 @@
 package br.ufba.designjudge.elems;
 
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,12 +30,12 @@ public class MethodElement extends ClassMemberElement {
 	}
 	
 	@Override
-	public Object[] getMatchingReflectionElements() {
+	public Method[] getMatchingReflectionElements() {
 		ArrayList<Constructor> result = new ArrayList<>();
 		
 		Class c = getReflectionClass();
 		if (c == null) {
-			return new Object[0];
+			return new Method[0];
 		}
 		
 
@@ -49,7 +50,26 @@ public class MethodElement extends ClassMemberElement {
 			stream = stream.filter(m -> m.getParameterCount() == parameterCount);
 		}
 		
-		return stream.toArray();
+		return stream.toArray(Method[]::new);
+	}
+	
+	// TODO: if there are multiple matches, use parameter list to choose correct one
+	public Object call(Object self, Object ...args) {
+		Class c = getReflectionClass();
+		if (c == null || getName() == null || getName().isEmpty()) {
+			return null;
+		}
+		Class[] paramClasses = Arrays.stream(args).map(x -> x.getClass()).toArray(Class[]::new);
+		try {
+			Method method = c.getDeclaredMethod(getName(), paramClasses);
+			if (method != null) {
+				return method.invoke(self, args);
+			} else {
+				return null;
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 	
 	@Override
