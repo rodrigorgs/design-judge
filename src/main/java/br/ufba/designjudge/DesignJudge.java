@@ -28,8 +28,8 @@ public class DesignJudge {
 		return new ElementSet(methods);
 	}
 	
-	public static ElementSet field() {
-		return new ElementSet(new FieldElement());
+	public static FieldElement field() {
+		return new FieldElement();
 	}
 	public static FieldElement field(String name) {
 		return new FieldElement(name);

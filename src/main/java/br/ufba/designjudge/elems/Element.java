@@ -48,9 +48,10 @@ public abstract class Element {
 	public ElementSet getAll(ElementSet set) {
 		throw new RuntimeException("Not implemented");
 	}
-//	public ElementSet getAll(ElementSet set) {
-//		return new ElementSet();
-//	}
+	
+	public ElementSet getAll(Element elem) {
+		return new ElementSet(elem);
+	}
 
 	public abstract void loadFromReflectionElement(Object elem);
 	
