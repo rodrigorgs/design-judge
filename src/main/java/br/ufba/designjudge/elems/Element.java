@@ -50,7 +50,7 @@ public abstract class Element {
 	}
 	
 	public ElementSet getAll(Element elem) {
-		return new ElementSet(elem);
+		return getAll(new ElementSet(elem));
 	}
 
 	public abstract void loadFromReflectionElement(Object elem);
