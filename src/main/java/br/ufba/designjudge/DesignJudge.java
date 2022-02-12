@@ -6,6 +6,7 @@ import java.util.Arrays;
 import br.ufba.designjudge.elems.ClassElement;
 import br.ufba.designjudge.elems.ConstructorElement;
 import br.ufba.designjudge.elems.ElementSet;
+import br.ufba.designjudge.elems.EnumElement;
 import br.ufba.designjudge.elems.FieldElement;
 import br.ufba.designjudge.elems.MethodElement;
 
@@ -42,5 +43,9 @@ public class DesignJudge {
 
 	public static ConstructorElement constructor() {
 		return new ConstructorElement();
+	}
+	
+	public static EnumElement enumeration(String name) {
+		return new EnumElement(name);
 	}
 }
