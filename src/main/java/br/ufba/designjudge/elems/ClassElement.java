@@ -16,15 +16,13 @@ public class ClassElement extends Element {
 	}
 	
 	// TODO: should return ElementSet
+	// lazy evaluation; returns element even if it does not exist
 	@Override
 	public Element get(Element element) {
 		if (element instanceof FieldElement) {
-			try {
-				Field field = klass.getDeclaredField(element.getName());
-				return new FieldElement(field);
-			} catch (NoSuchFieldException | SecurityException e) {
-				return super.get(element);
-			}
+			FieldElement field = (FieldElement)element;
+			field.setKlass(this);
+			return field;
 		} else if (element instanceof ConstructorElement) {
 			ConstructorElement ctor = (ConstructorElement)element;
 			ctor.setKlass(this);

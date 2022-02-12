@@ -40,9 +40,9 @@ public abstract class Element {
 	}
 	
 	// TODO: make it an element set
-	// TODO: remove this one
+	// TODO: replace body with exception throwing
 	public Element get(Element e) {
-		return new NullElement();
+		return new NullElement(e.getName());
 	}
 
 	public ElementSet getAll(ElementSet set) {
@@ -150,5 +150,19 @@ public abstract class Element {
 		return true;
 	}
 	
+	public MethodElement asMethod() {
+		return (MethodElement) this;
+	}
 	
+	public ClassElement asClass() {
+		return (ClassElement) this;
+	}
+	
+	public FieldElement asField() {
+		return (FieldElement) this;
+	}
+	
+	public ConstructorElement asConstructor() {
+		return (ConstructorElement) this;
+	}
 }
