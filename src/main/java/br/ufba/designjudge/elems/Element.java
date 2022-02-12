@@ -1,5 +1,7 @@
 package br.ufba.designjudge.elems;
 
+import br.ufba.designjudge.exception.JudgeException;
+
 public abstract class Element {
 	private String name;
 	private int modifiers;
@@ -35,7 +37,7 @@ public abstract class Element {
 		} else if (elems.length == 1) {
 			return elems[0];
 		} else {
-			throw new RuntimeException("More than one match");
+			throw new JudgeException("More than one match");
 		}
 	}
 	
@@ -46,7 +48,7 @@ public abstract class Element {
 	}
 
 	public ElementSet getAll(ElementSet set) {
-		throw new RuntimeException("Not implemented");
+		throw new JudgeException("Not implemented");
 	}
 	
 	public ElementSet getAll(Element elem) {
@@ -66,7 +68,7 @@ public abstract class Element {
 	public void mustHaveModifier(int modifierFlag) {
 		System.out.println(this + " modifiers: " + modifiers);
 		if (!hasModifier(modifierFlag)) {
-			throw new RuntimeException(this + " does not have modifier " + modifierFlag);
+			throw new JudgeException(this + " does not have modifier " + modifierFlag);
 		}
 	}
 	
@@ -95,13 +97,13 @@ public abstract class Element {
 	public void mustExist() {
 		Object[] matches = getMatchingReflectionElements();
 		if (matches.length == 0) {
-			throw new RuntimeException(this + " does not exist");
+			throw new JudgeException(this + " does not exist");
 		}
 	}
 	
 	public Element mustHave(Element e) {
 		if (!has(e)) {
-			throw new RuntimeException(this + " does not have element " + e);
+			throw new JudgeException(this + " does not have element " + e);
 		}
 		return this;
 	}
@@ -113,7 +115,7 @@ public abstract class Element {
 	
 	public Element mustNotHave(Element e) {
 		if (has(e)) {
-			throw new RuntimeException(this + " should not have element " + e);
+			throw new JudgeException(this + " should not have element " + e);
 		}
 		return this;
 	}

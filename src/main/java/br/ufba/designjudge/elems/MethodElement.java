@@ -1,11 +1,12 @@
 package br.ufba.designjudge.elems;
 
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Stream;
+
+import br.ufba.designjudge.exception.JudgeException;
 
 public class MethodElement extends ClassMemberElement {
 	public static final int UNDEFINED_PARAMETER_COUNT = -1;
@@ -68,7 +69,7 @@ public class MethodElement extends ClassMemberElement {
 				return null;
 			}
 		} catch (Exception e) {
-			throw new RuntimeException(e);
+			throw new JudgeException(e);
 		}
 	}
 	

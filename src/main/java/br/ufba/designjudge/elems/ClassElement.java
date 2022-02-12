@@ -6,6 +6,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import br.ufba.designjudge.exception.JudgeException;
+
 public class ClassElement extends Element {
 	private Class klass;
 	
@@ -34,7 +36,7 @@ public class ClassElement extends Element {
 		} else if (element instanceof ElementSet) {
 			return super.get(element);
 		} else {
-			throw new RuntimeException("not implemented yet");
+			throw new JudgeException("not implemented yet");
 		}
 	}
 	
@@ -82,7 +84,7 @@ public class ClassElement extends Element {
 		} else if (element instanceof ElementSet) {
 			return super.has(element);
 		} else {
-			throw new RuntimeException("Not implemented: class.get ...");
+			throw new JudgeException("Not implemented: class.get ...");
 		}
 	}
 	

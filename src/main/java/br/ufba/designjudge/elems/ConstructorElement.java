@@ -5,6 +5,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import br.ufba.designjudge.exception.JudgeException;
+
 public class ConstructorElement extends ClassMemberElement {
 	public static final int UNDEFINED_PARAMETER_COUNT = -1;
 	private int parameterCount = UNDEFINED_PARAMETER_COUNT;
@@ -64,7 +66,7 @@ public class ConstructorElement extends ClassMemberElement {
 					| InvocationTargetException e) {
 			}
 		} else if (constructors.length > 1) {
-			throw new RuntimeException("Multiple constructor matches");
+			throw new JudgeException("Multiple constructor matches");
 		}
 		return null;
 	}

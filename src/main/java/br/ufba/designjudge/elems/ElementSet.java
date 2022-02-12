@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Stream;
 
+import br.ufba.designjudge.exception.JudgeException;
+
 public class ElementSet extends Element {
 	private ArrayList<Element> elements = new ArrayList<>();
 	
@@ -101,7 +103,7 @@ public class ElementSet extends Element {
 
 	@Override
 	public ElementSet getAll(ElementSet set) {
-		throw new RuntimeException("Not implemented yet");
+		throw new JudgeException("Not implemented yet");
 	}
 
 	@Override
