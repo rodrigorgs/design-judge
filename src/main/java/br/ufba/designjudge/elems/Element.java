@@ -3,7 +3,7 @@ package br.ufba.designjudge.elems;
 import br.ufba.designjudge.exception.JudgeException;
 
 public abstract class Element {
-	private String name;
+	protected String name;
 	private int modifiers;
 	
 	int getModifiers() {

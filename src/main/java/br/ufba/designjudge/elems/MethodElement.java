@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import br.ufba.designjudge.exception.JudgeException;
@@ -34,13 +35,13 @@ public class MethodElement extends ClassMemberElement {
 	public Method[] getMatchingReflectionElements() {
 		ArrayList<Constructor> result = new ArrayList<>();
 		
-		Class c = getReflectionClass();
-		if (c == null) {
+		Optional<Class> c = getReflectionClass();
+		if (c.isEmpty()) {
 			return new Method[0];
 		}
 		
 
-		Stream<Method> stream = Arrays.stream(c.getDeclaredMethods());
+		Stream<Method> stream = Arrays.stream(c.get().getDeclaredMethods());
 		if (getName() != null) {
 			stream = stream.filter(m -> m.getName().equals(getName()));
 		}
@@ -56,14 +57,15 @@ public class MethodElement extends ClassMemberElement {
 	
 	// TODO: if there are multiple matches, use parameter list to choose correct one
 	public Object call(Object self, Object ...args) {
-		Class c = getReflectionClass();
-		if (c == null || getName() == null || getName().isEmpty()) {
+		Optional<Class> c = getReflectionClass();
+		if (c.isEmpty() || getName() == null || getName().isEmpty()) {
 			return null;
 		}
 		Class[] paramClasses = Arrays.stream(args).map(x -> x.getClass()).toArray(Class[]::new);
 		try {
-			Method method = c.getDeclaredMethod(getName(), paramClasses);
+			Method method = c.get().getDeclaredMethod(getName(), paramClasses);
 			if (method != null) {
+				method.setAccessible(true);
 				return method.invoke(self, args);
 			} else {
 				return null;

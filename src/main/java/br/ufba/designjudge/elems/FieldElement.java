@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 public class FieldElement extends ClassMemberElement {
@@ -26,12 +27,12 @@ public class FieldElement extends ClassMemberElement {
 	public Field[] getMatchingReflectionElements() {
 		ArrayList<Constructor> result = new ArrayList<>();
 
-		Class c = getReflectionClass();
-		if (c == null) {
+		Optional<Class> c = getReflectionClass();
+		if (c.isEmpty()) {
 			return new Field[0];
 		}
 
-		Stream<Field> stream = Arrays.stream(c.getDeclaredFields());
+		Stream<Field> stream = Arrays.stream(c.get().getDeclaredFields());
 		stream = stream.filter(f -> !f.getName().startsWith("$"));
 		if (getName() != null) {
 			stream = stream.filter(f -> f.getName().equals(getName()));

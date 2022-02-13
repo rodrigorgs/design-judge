@@ -1,5 +1,7 @@
 package br.ufba.designjudge.elems;
 
+import java.util.Optional;
+
 public abstract class ClassMemberElement extends Element {
 	private ClassElement klass;
 	protected Class[] parameterList;
@@ -19,17 +21,12 @@ public abstract class ClassMemberElement extends Element {
     	return this;
     }
         
-    public Class getReflectionClass() {
+    public Optional<Class> getReflectionClass() {
     	if (klass == null) {
-			return null;
+			return Optional.empty();
+		} else {
+			return klass.getReflectionElement();
 		}
-		
-		Class c = klass.getReflectionElement();
-		if (c == null) {
-			return null;
-		}
-		
-		return c;
     }
     
 	ClassElement getKlass() {

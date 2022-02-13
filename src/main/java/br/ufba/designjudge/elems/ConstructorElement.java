@@ -3,6 +3,7 @@ package br.ufba.designjudge.elems;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import br.ufba.designjudge.exception.JudgeException;
@@ -38,12 +39,12 @@ public class ConstructorElement extends ClassMemberElement {
 	
 	@Override
 	public Constructor[] getMatchingReflectionElements() {
-		Class c = getReflectionClass();
-		if (c == null) {
+		Optional<Class> c = getReflectionClass();
+		if (c.isEmpty()) {
 			return new Constructor[0];
 		}
 		
-		Stream<Constructor> stream = Arrays.stream(c.getDeclaredConstructors());
+		Stream<Constructor> stream = Arrays.stream(c.get().getDeclaredConstructors());
 		
 		if (parameterList != null) {
 			stream = stream.filter(ctor -> Arrays.equals(ctor.getParameterTypes(), parameterList));
@@ -61,14 +62,18 @@ public class ConstructorElement extends ClassMemberElement {
 		
 		if (constructors.length == 1) {
 			try {
+				constructors[0].setAccessible(true);
 				return constructors[0].newInstance(args);
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException e) {
+				System.out.println(e);
 			}
 		} else if (constructors.length > 1) {
 			throw new JudgeException("Multiple constructor matches");
+		} else if (constructors.length == 0) {
+			throw new JudgeException("No constructor matches");
 		}
-		return null;
+		throw new JudgeException("Error on calling constructor");
 	}
 	
 	@Override

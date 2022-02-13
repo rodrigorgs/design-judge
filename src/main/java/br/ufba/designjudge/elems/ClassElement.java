@@ -4,17 +4,25 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 import br.ufba.designjudge.exception.JudgeException;
 
 public class ClassElement extends Element {
-	private Class klass;
+	private Optional<Class> klass;
 	
 	public ClassElement(String name) {
 		super(name);
-		
 		klass = getReflectionElement();
+	}
+	
+	
+	public ClassElement getSuperclass() {
+		ClassElement newClass = new ClassElement("");
+		Class superClass = getReflectionElement().get().getSuperclass();
+		newClass.loadFromReflectionElement(superClass);
+		return newClass;
 	}
 	
 	// TODO: should return ElementSet
@@ -71,11 +79,9 @@ public class ClassElement extends Element {
 			return false;
 		}
 		
-		System.out.println("get all: " + getAll(new ElementSet(element)));
 //		return !getAll(new ElementSet(element)).isEmpty();
 		if (element instanceof MethodElement) {
 			Stream<Method> methods = methodsWithName(element.getName());
-			System.out.println(methods);
 			return methods.anyMatch(m -> m.getName().equals(element.getName()));
 		} else if (element instanceof FieldElement) {
 			return get(element) instanceof FieldElement;
@@ -88,38 +94,64 @@ public class ClassElement extends Element {
 		}
 	}
 	
-	public Class getReflectionElement() {
+	public Optional<Class> getReflectionElement() {
 		try {
-			return Class.forName(getName());
+			return Optional.of(Class.forName(getName()));
 		} catch (ClassNotFoundException e) {
-			return null;
+			return Optional.empty();
 		}
 	}
 	
 	@Override
 	public Object[] getMatchingReflectionElements() {
-		Class c = getReflectionElement();
-		if (c == null) {
+		Optional<Class> c = getReflectionElement();
+		if (c.isEmpty()) {
 			return new Object[0];
 		} else {			
-			return new Object[] { c };
+			return new Object[] { c.get() };
 		}
 	}
 
 	// TODO: convert to MethodElement
 	private Stream<Method> methodsWithName(String name) {
-		if (klass == null) {
-			return Arrays.stream(new Method[] {});
-		} 
-		System.out.println("declared: " + klass.getDeclaredMethods());
-		return Arrays.stream(klass.getDeclaredMethods());
+		Method[] result;
+		if (klass.isPresent()) {
+			result = klass.get().getDeclaredMethods();
+		} else {
+			result = new Method[0];
+		}
+		return Arrays.stream(result);
 	}
 
 	@Override
 	public void loadFromReflectionElement(Object elem) {
 		Class c = (Class)elem;
 		setModifiers(c.getModifiers());
+		name = c.getName();
 	}
 
-	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ClassElement other = (ClassElement) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
 }
