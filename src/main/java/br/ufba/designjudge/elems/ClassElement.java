@@ -123,6 +123,12 @@ public class ClassElement extends Element {
 		return Arrays.stream(result);
 	}
 
+	public Object instantiate(Object ...params) {
+		ConstructorElement ctor = new ConstructorElement();
+		ctor.setKlass(this);
+		return ctor.call(params);
+	}
+	
 	@Override
 	public void loadFromReflectionElement(Object elem) {
 		Class c = (Class)elem;

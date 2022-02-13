@@ -7,6 +7,9 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.apache.commons.beanutils.BeanUtils;
+import org.apache.commons.beanutils.MethodUtils;
+
 import br.ufba.designjudge.exception.JudgeException;
 
 public class MethodElement extends ClassMemberElement {
@@ -61,16 +64,20 @@ public class MethodElement extends ClassMemberElement {
 		if (c.isEmpty() || getName() == null || getName().isEmpty()) {
 			return null;
 		}
-		Class[] paramClasses = Arrays.stream(args).map(x -> x.getClass()).toArray(Class[]::new);
+		Class[] paramClasses = parameterList;
+		if (paramClasses == null) {
+			paramClasses = Arrays.stream(args).map(x -> x.getClass()).toArray(Class[]::new);
+		}
 		try {
-			Method method = c.get().getDeclaredMethod(getName(), paramClasses);
+			Method method = MethodUtils.getMatchingAccessibleMethod(c.get(), name, paramClasses);
 			if (method != null) {
 				method.setAccessible(true);
 				return method.invoke(self, args);
 			} else {
-				return null;
+				throw new JudgeException("Error trying to call " + name + " on " + c.get() + " with parameters " + Arrays.toString(paramClasses));
 			}
 		} catch (Exception e) {
+			System.out.println(e);
 			throw new JudgeException(e);
 		}
 	}
