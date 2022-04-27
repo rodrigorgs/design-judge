@@ -8,9 +8,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class FieldElement extends ClassMemberElement {
-	private int modifiers;
-
-	
+		
 	public FieldElement() {
 		super(null);
 	}

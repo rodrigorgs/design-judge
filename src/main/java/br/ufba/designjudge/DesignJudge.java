@@ -24,6 +24,10 @@ public class DesignJudge {
 		return new MethodElement(name);
 	}
 
+	public static MethodElement method() {
+		return new MethodElement();
+	}
+	
 	public static ElementSet methods(String ...names) {
 		MethodElement[] methods = Arrays.stream(names).map(name -> new MethodElement(name)).toArray(MethodElement[]::new);
 		return new ElementSet(methods);

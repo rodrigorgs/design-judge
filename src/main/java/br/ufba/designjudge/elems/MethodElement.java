@@ -15,6 +15,10 @@ import br.ufba.designjudge.exception.JudgeException;
 public class MethodElement extends ClassMemberElement {
 	public static final int UNDEFINED_PARAMETER_COUNT = -1;
 	private int parameterCount = UNDEFINED_PARAMETER_COUNT;
+
+	public MethodElement() {
+		super(null);
+	}
 	
 	public MethodElement(String name) {
 		super(name);
